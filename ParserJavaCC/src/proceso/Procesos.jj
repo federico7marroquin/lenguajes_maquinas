@@ -1,0 +1,219 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */
+options
+{
+  JDK_VERSION = "1.5";
+  static = false;
+}
+
+PARSER_BEGIN(procesos)
+package uniandes.teolen.parserJavaCC.procesos;
+
+public class procesos
+{
+  
+}
+
+PARSER_END(procesos)
+
+SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+}
+
+TOKEN : /* PROCESO */
+
+{
+< TASKS: "Tasks:" >
+
+| < WORKERS: "Workers:" >
+
+|< TOOLS: "Tools:" >
+
+| < MACHINES: "Machines:">
+
+| <NEEDS: "Needs:" >
+
+| <ORDER: "Order:" >
+
+| <TIME: "Time:" >
+
+| <START: "Start:" >
+
+| <PROCESS: "Process" >
+  
+}
+TOKEN : /* OPERATORS */
+{
+  < PLUS : "+" >
+| < MINUS : "-" >
+| < MULTIPLY : "*" >
+| < DIVIDE : "/" >
+}
+
+TOKEN :
+{
+  < CONSTANT : (< DIGIT >)+ >
+| < #DIGIT : [ "0"-"9" ] >
+| <LETRAS: ["a"-"z", "A"-"Z" ] >
+| < D: "(">
+| < I: ")">
+}
+
+void beginProceso() :
+{}
+{
+  <PROCESS > <LETRAS >
+
+ 
+
+  tasks() ( workers()  tools()|   machines()) needs() orders() times() start()
+
+
+
+   "end"
+
+   }
+
+
+
+
+void tasks() :{}
+{
+   < TASKS >task() (","task())*
+}
+void task() :{}
+{
+    (< LETRAS >)(< LETRAS> )*
+}
+void workers() :{}
+{
+  < WORKERS> worker() ("," worker())*
+}
+
+
+
+void worker() :
+
+{}
+
+{
+   "(" < LETRAS > "," < CONSTANT > ")"
+
+}
+
+void tools() :{}
+{
+  < TOOLS > "(" tool()")"("," "(" tool()")")*
+}
+
+
+
+void tool() :
+
+{}
+
+{
+
+  (< LETRAS>)+ "," < CONSTANT > 
+
+}
+
+
+
+void machines() :
+
+{}
+
+{
+
+ < MACHINES > machine()("," machine())*
+
+}
+
+void machine() :
+
+{}
+
+{
+
+ "(" (< LETRAS>)+ "," < CONSTANT > ")"
+
+}
+
+
+
+void needs() :
+
+{}
+
+{
+ < NEEDS> need()("," need())*
+
+}
+
+void need() :
+
+{}
+
+{
+task() ( "("tool()","tool()(","tool())* | tool())
+}
+
+
+
+void orders() :
+
+{}
+
+{
+
+ <ORDER > order()("," order())*
+
+}
+
+void order() :
+
+{}
+
+{
+
+  "(" "start" | task() "," task() ")"
+
+  
+
+}
+
+void times() :
+
+{}
+
+{
+
+  <TIME >time()("," time())*
+
+}
+
+void time() :
+
+
+{}
+
+{
+
+  task()"(" < CONSTANT > ")"
+
+}
+
+void start() :
+
+{}
+
+{
+
+  < START> <CONSTANT >
+}

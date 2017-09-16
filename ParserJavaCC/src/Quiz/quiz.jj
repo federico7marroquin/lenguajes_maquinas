@@ -1,0 +1,20 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = false;}PARSER_BEGIN(quiz)package Quiz;
+
+public class quiz{
+ }PARSER_END(quiz)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >}TOKEN :{  < #DIGIT : [ "0"-"9" ] >
+|  < LETRAS : ["a"-"z"] >
+|  < NOM : (< LETRAS >)+(< LETRAS > | < DIGIT >)* >
+| <#NUM : (["1" - "9"])>
+| < NUMERO:( < NUM >)+(< DIGIT >)* >
+| < IDX : "reg1"|"reg2"|"reg3"|"reg4" >
+}void prog() :{}{ "PROG" <  NOM > is()  "GORP"}void is() :{}{ (i() ";")+
+}void i() :{}{"PUSH" < NUMERO >
+|"PUSH_FROM" < IDX >
+|"POP"
+|"POP_TO" < IDX >
+|"PLUS"
+|"TIMES"
+|"POW" < NUMERO >
+|"CHS"}
