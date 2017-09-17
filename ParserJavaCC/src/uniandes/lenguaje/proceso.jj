@@ -1,0 +1,212 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = false;}PARSER_BEGIN(proceso)package uniandes.lenguaje;
+
+public class proceso{ }PARSER_END(proceso)SKIP :
+{
+  " "
+| "\r"
+| "\t"
+| "\n"
+}
+
+TOKEN : /* PROCESO */
+
+{
+< TASKS: "Tasks:" >
+
+| < WORKERS: "Workers:" >
+
+|< TOOLS: "Tools:" >
+
+| < MACHINES: "Machines:">
+
+| <NEEDS: "Needs:" >
+
+| <ORDER: "Order:" >
+
+| <TIME: "Time:" >
+
+| <START: "Start:" >
+
+| <PROCESS: "Process" >
+
+| <END: "End" >
+  
+}
+TOKEN : /* OPERATORS */
+{
+  < PLUS : "+" >
+| < MINUS : "-" >
+| < MULTIPLY : "*" >
+| < DIVIDE : "/" >
+}
+
+TOKEN :
+{
+  < CONSTANT : (< DIGIT >)+ >
+| < #DIGIT : [ "0"-"9" ] >
+| <LETRAS: ["a"-"z", "A"-"Z" ] >
+| < D: ["("]>
+| < I: [")"]>
+}
+
+void beginProceso() :
+{}
+{
+  <PROCESS > <LETRAS >
+
+ 
+
+  tasks() ( workers()  tools()|   machines()) needs() orders() times() start()
+
+
+
+   < END>
+
+   }
+
+
+
+
+void tasks() :{}
+{
+   < TASKS >task() (","task())*
+}
+void task() :{}
+{
+    (< LETRAS >)+
+}
+void workers() :{}
+{
+  < WORKERS> worker() ("," worker())*
+}
+
+
+
+void worker() :
+
+{}
+
+{
+   <D > < LETRAS > "," < CONSTANT > < I>
+
+}
+
+void tools() :{}
+{
+  < TOOLS > <D > tool()("," <D > tool())*
+}
+
+
+
+void tool() :
+
+{}
+
+{
+
+  (< LETRAS>)+ "," < CONSTANT > < I>
+
+}
+
+
+
+void machines() :
+
+{}
+
+{
+
+ < MACHINES > machine()("," machine())*
+
+}
+
+void machine() :
+
+{}
+
+{
+
+< D> (< LETRAS>)+ "," < CONSTANT > < I>
+
+}
+
+
+
+void needs() :
+
+{}
+
+{
+ < NEEDS> need()("," need())*
+
+}
+
+void need() :
+
+{}
+
+{
+ task() ("((" tool() "," <D > tool()(","  <D >tool())* < I> | <D >tool())
+}
+
+
+
+void orders() :
+
+{}
+
+{
+
+ <ORDER > order()("," order())*
+
+}
+
+void order() :
+
+{}
+
+{
+
+  < D> (("Start" "," inOrder()) | (task() "," inOrder())) < I>
+
+  
+
+}
+void inOrder() :
+{}
+{
+  task()
+| < D> task()("," task())*< I>
+}
+
+void times() :
+
+{}
+
+{
+
+  <TIME >time()("," time())*
+
+}
+
+void time() :
+
+
+{}
+
+{
+
+  task()< D> < CONSTANT > < I>
+
+}
+
+void start() :
+
+{}
+
+{
+
+  < START> <CONSTANT >
+}
